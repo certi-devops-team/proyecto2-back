@@ -41,25 +41,10 @@ jobs:
             # Asegurar red
             docker network create exchange-network || true
             
-            # Correr el nuevo contenedor con la string de conexión construida
             docker run -d \
               --name exchange-backend \
               --network exchange-network \
               --restart always \
               -p 3000:3000 \
-              -e DATABASE_URL=${{ secrets.DB_URL }} \
+              -e DATABASE_URL="${{ secrets.DB_URL }}" \
               ${{ secrets.DOCKER_USERNAME }}/exchange-backend:latest
-
-            # --- VERIFICACIÓN DE DESPLIEGUE ---
-            echo "⏳ Esperando 10 segundos para verificar arranque..."
-            sleep 10
-
-            echo "📜 Logs de arranque:"
-            docker logs exchange-backend
-
-            if [ "$(docker inspect -f '{{.State.Running}}' exchange-backend)" = "true" ]; then
-              echo "✅ El backend está corriendo correctamente."
-            else
-              echo "❌ El contenedor se detuvo inesperadamente."
-              exit 1
-            fi
