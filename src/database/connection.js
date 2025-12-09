@@ -1,5 +1,4 @@
 const dns = require('dns');
-// Forzar uso de IPv4 para evitar errores ENETUNREACH con direcciones IPv6 en Docker
 if (dns.setDefaultResultOrder) {
   dns.setDefaultResultOrder('ipv4first');
 }
@@ -9,12 +8,8 @@ require("dotenv").config();
 
 // Configuración del pool de conexiones PostgreSQL
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT || 5432,
-  ssl: { rejectUnauthorized: false } 
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false
 });
 
 // Verificar conexión
