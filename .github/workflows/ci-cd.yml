@@ -46,6 +46,7 @@ jobs:
               --network exchange-network \
               --restart always \
               -p 3000:3000 \
+              -e NODE_ENV="${{secrets.NODE_ENV}}" \
               -e DATABASE_URL="${{ secrets.DB_URL }}" \
               ${{ secrets.DOCKER_USERNAME }}/exchange-backend:latest
             
