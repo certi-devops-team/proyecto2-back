@@ -41,14 +41,19 @@ jobs:
             # Asegurar red
             docker network create exchange-network || true
             
+            # Crear archivo .env con el contenido del secreto BACKEND_ENV
+            echo "${{ secrets.BACKEND_ENV }}" > .env
+            
             docker run -d \
               --name exchange-backend \
               --network exchange-network \
               --restart always \
               -p 3000:3000 \
-              -e NODE_ENV="${{secrets.NODE_ENV}}" \
-              -e DATABASE_URL="${{ secrets.DB_URL }}" \
+              --env-file .env \
               ${{ secrets.DOCKER_USERNAME }}/exchange-backend:latest
+            
+            # Limpiar archivo .env por seguridad
+            rm .env
             
                     # --- VERIFICACIÓN DE DESPLIEGUE ---
             echo "⏳ Esperando 10 segundos para verificar arranque..."
