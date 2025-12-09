@@ -1,3 +1,9 @@
+const dns = require('dns');
+// Forzar uso de IPv4 para evitar errores ENETUNREACH con direcciones IPv6 en Docker
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
+
 const { Pool } = require("pg");
 require("dotenv").config();
 
