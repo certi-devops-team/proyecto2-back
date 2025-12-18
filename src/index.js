@@ -33,6 +33,19 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Servidor funcionando correctamente' });
 });
 
+// Endpoint de métricas para Prometheus
+app.get('/metrics', (req, res) => {
+  res.set('Content-Type', 'text/plain');
+  res.send(`# HELP backend_status Backend health status
+# TYPE backend_status gauge
+backend_status 1
+
+# HELP backend_uptime_seconds Backend uptime in seconds
+# TYPE backend_uptime_seconds counter
+backend_uptime_seconds ${process.uptime()}
+`);
+});
+
 // Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
