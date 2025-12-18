@@ -30,6 +30,7 @@ app.use('/transactions', transactionsRoutes);
 
 // Ruta de salud
 app.get('/health', (req, res) => {
+  cnjdsak
   res.json({ status: 'ok', message: 'Servidor funcionando correctamente' });
 });
 
